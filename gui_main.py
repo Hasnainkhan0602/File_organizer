@@ -1,6 +1,3 @@
-# file: gui_main.py
-# This file creates the graphical user interface for the application.
-
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from organizer.operations import organize_folder
@@ -10,20 +7,20 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        # --- Window Configuration ---
+       
         self.title("File Organizer")
         self.geometry("500x250")
         self.resizable(False, False)
 
-        # --- Style Configuration ---
+      
         style = ttk.Style(self)
         style.configure("TButton", font=("Helvetica", 10))
         style.configure("TLabel", font=("Helvetica", 10))
 
-        # --- State Variables ---
+        
         self.folder_path = tk.StringVar()
 
-        # --- UI Layout ---
+       
         self.create_widgets()
 
     def create_widgets(self):
@@ -31,7 +28,7 @@ class App(tk.Tk):
         main_frame = ttk.Frame(self, padding="20")
         main_frame.pack(expand=True, fill="both")
 
-        # --- Folder Selection ---
+      
         select_frame = ttk.Frame(main_frame)
         select_frame.pack(fill="x", pady=10)
 
@@ -44,11 +41,11 @@ class App(tk.Tk):
         path_display = ttk.Entry(main_frame, textvariable=self.folder_path, state="readonly", width=60)
         path_display.pack(fill="x", pady=5)
 
-        # --- Action Button ---
+       
         self.organize_button = ttk.Button(main_frame, text="Organize Files", command=self.start_organization_thread)
         self.organize_button.pack(pady=20, ipady=5)
         
-        # --- Status Label ---
+        
         self.status_label = ttk.Label(main_frame, text="Please select a folder to begin.")
         self.status_label.pack(pady=10)
 
@@ -69,12 +66,11 @@ class App(tk.Tk):
             messagebox.showwarning("Warning", "Please select a folder first.")
             return
 
-        # Disable buttons to prevent multiple clicks
+        
         self.organize_button.config(state="disabled")
         self.select_button.config(state="disabled")
         self.status_label.config(text="Organizing... Please wait.")
 
-        # Run the potentially long-running task in a new thread
         organization_thread = threading.Thread(
             target=self.run_organization, 
             args=(path,)
@@ -87,15 +83,13 @@ class App(tk.Tk):
         This runs in a separate thread.
         """
         try:
-            # NOTE: The original organize_folder function prints to the console.
-            # A more advanced GUI would capture this output. For now, the user
-            # can see the progress in the console if the app is run from there.
+           
             organize_folder(path)
             
-            # When done, schedule a GUI update on the main thread
+            
             self.after(0, self.on_organization_complete)
         except Exception as e:
-            # Schedule an error message on the main thread
+           
             self.after(0, self.on_organization_error, e)
             
     def on_organization_complete(self):
